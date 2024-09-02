@@ -1,0 +1,11 @@
+name: EverShare
+version: '1.0'
+main: dev.unstackss.everShare.EverShare
+api-version: '1.21'
+prefix: EverShare
+authors: [ UnStackss ]
+description: Offical EverCraft invites system with webpanel
+website: https://unstackss.dev
+commands:
+  invite:
+    description: Invites players to join the game.

@@ -1,0 +1,25 @@
+#      ______                _____ __
+#     / ____/   _____  _____/ ___// /_  ____ _________
+#    / __/ | | / / _ \/ ___/\__ \/ __ \/ __ `/ ___/ _ \
+#   / /___ | |/ /  __/ /   ___/ / / / / /_/ / /  /  __/
+#  /_____/ |___/\___/_/   /____/_/ /_/\__,_/_/   \___/
+#
+# EverShare, made with ♥ by UnStackss
+# UnStackss GitHub: https://github.com/UnStackss
+# Visit UnStackss Dev: https://unstackss.dev
+database:
+  url: jdbc:mysql://localhost:3306/minecraft # MySQL database URL
+  user: root # Database username
+  password: password # Database password
+webserver:
+  host: localhost # Hostname for the web server
+  port: 8081 # Port for the web server
+  logo_url: "https://i.imgur.com/BgLF3nR.png" # Logo URL for the web server
+  favicon_url: "https://www.dropbox.com/scl/fi/g99qjc32grfagw1f6y3vr/h3ECghf-removebg-preview.ico?rlkey=xa2rf35c65bwblemqs8js1xqz&st=qtwasdx5&dl=1" # Favicon URL for the web server
+  description: "EverCraft invite system" # Description for the web server
+server:
+  ip: mc.evercraft.it # Minecraft server IP address
+dns:
+  url: http://localhost # Base URL for referrals (changeable to desired DNS)
+messages:
+  language: en_us # Language file for customizable messages
