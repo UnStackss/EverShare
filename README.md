@@ -1,4 +1,4 @@
-# EverShare Plugin
+# EverShare Plugin 1.8-1.21
 
 <p align="center">
   <img src="https://i.imgur.com/m5Nwigv.png" alt="EverShare Logo" width="300"/>
