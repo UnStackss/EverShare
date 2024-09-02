@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/a14a367e-b6a6-4a94-bbd2-d8e930ad6546)# EverShare Plugin
+# EverShare Plugin
 
 <p align="center">
   <img src="https://i.imgur.com/m5Nwigv.png" alt="EverShare Logo" width="300"/>
