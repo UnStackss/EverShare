@@ -1,4 +1,4 @@
-# EverShare Plugin
+![image](https://github.com/user-attachments/assets/a14a367e-b6a6-4a94-bbd2-d8e930ad6546)# EverShare Plugin
 
 <p align="center">
   <img src="https://i.imgur.com/m5Nwigv.png" alt="EverShare Logo" width="300"/>
@@ -47,6 +47,33 @@ The web interface can be accessed at the URL specified in the `config.yml` file.
 ### Customizing Messages
 
 The messages displayed in the web interface can be customized by editing the `languages/en_us.json` file in the `plugins/EverShare` folder.
+
+## Screenshots
+
+<details>
+<summary>Click to view screenshots</summary>
+
+<p align="center">
+  <img src="https://i.imgur.com/YUqxNEv.png" alt="Screenshot 1" width="600"/>
+</p>
+
+<p align="center">
+  <img src="https://i.imgur.com/oxTERNn.png" alt="Screenshot 2" width="600"/>
+</p>
+
+<p align="center">
+  <img src="https://i.imgur.com/TXUi0Cb.png" alt="Screenshot 3" width="600"/>
+</p>
+
+<p align="center">
+  <img src="https://i.imgur.com/BmlgqXy.png" alt="Screenshot 4" width="600"/>
+</p>
+
+<p align="center">
+  <img src="https://i.imgur.com/9JxSzt8.png" alt="Screenshot 5" width="600"/>
+</p>
+
+</details>
 
 ## Troubleshooting
 
