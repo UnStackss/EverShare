@@ -15,6 +15,7 @@ EverShare is a Minecraft plugin that allows players to generate referral codes, 
 - **Web Interface**: Provides a web interface to view referral information, including referral codes and hit counts.
 - **Customizable Messages**: Easily configure and customize the messages displayed on the web interface.
 - **Favicon Support**: Automatically download and use a favicon for the web interface.
+- **QRCode**: Automatically generate a qrcode of the referral.
 
 ## Installation
 
@@ -58,7 +59,7 @@ The messages displayed in the web interface can be customized by editing the `la
 </p>
 
 <p align="center">
-  <img src="https://i.imgur.com/oxTERNn.png" alt="Screenshot 2" width="600"/>
+  <img src="https://i.imgur.com/nZuY4SE.png" alt="Screenshot 2" width="600"/>
 </p>
 
 <p align="center">
