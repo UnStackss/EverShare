@@ -25,6 +25,7 @@ dependencies {
     implementation("com.sparkjava:spark-core:2.9.4")
     implementation("org.slf4j:slf4j-simple:2.0.7")
     implementation("org.json:json:20240303")
+    implementation("com.google.zxing:core:3.5.2")
 }
 
 val targetJavaVersion = 21

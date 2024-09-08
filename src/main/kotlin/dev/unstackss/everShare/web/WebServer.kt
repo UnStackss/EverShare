@@ -1,14 +1,19 @@
 package dev.unstackss.everShare.web
 
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.WriterException
+import com.google.zxing.qrcode.QRCodeWriter
 import dev.unstackss.everShare.EverShare
 import dev.unstackss.everShare.referral.ReferralManager
 import spark.Spark
 import spark.Spark.*
+import java.awt.image.BufferedImage
+import java.io.ByteArrayOutputStream
+import javax.imageio.ImageIO
 
 class WebServer(private val plugin: EverShare) {
 
     private val referralManager = ReferralManager()
-
 
     fun start() {
         val host = plugin.config.getString("webserver.host") ?: "localhost"
@@ -29,15 +34,19 @@ class WebServer(private val plugin: EverShare) {
         get("/referral/:code") { req, res ->
             handleReferral(req, res)
         }
+
+        get("/qrcode/:code") { req, res ->
+            handleQRCode(req, res)
+        }
     }
 
     fun stop() {
         Spark.stop()
     }
+
     private fun handleReferral(req: spark.Request, res: spark.Response): String {
         val code = req.params(":code")
         val referral = referralManager.getReferral(code)
-
 
         if (referral != null) {
             referralManager.incrementReferralHits(code)
@@ -64,6 +73,7 @@ class WebServer(private val plugin: EverShare) {
                         margin: 0;
                         padding: 0;
                         display: flex;
+                        flex-direction: column;
                         justify-content: center;
                         align-items: center;
                         height: 100vh;
@@ -124,31 +134,72 @@ class WebServer(private val plugin: EverShare) {
                     .copy-button i {
                         margin-right: 5px;
                     }
+                    .qrcode-card {
+                        width: 97%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                        margin-top: 20px;
+                        padding: 10px;
+                        background-color: #161b22;
+                        border-radius: 8px;
+                        position: relative;
+                    }
+                    .qrcode-card img {
+                        max-width: 200px;
+                        height: auto;
+                        display: none;
+                    }
+                    .loading-spinner {
+                        border: 4px solid #f3f3f3;
+                        border-top: 4px solid #0d6efd;
+                        border-radius: 50%;
+                        width: 40px;
+                        height: 40px;
+                        animation: spin 1s linear infinite;
+                        margin: auto;
+                    }
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
                     @keyframes fadeIn {
                         from { opacity: 0; }
                         to { opacity: 1; }
                     }
                 </style>
                 <script>
-                    function copyToClipboard(text) {
-                        navigator.clipboard.writeText(text).then(function() {
-                            alert('Copied to clipboard: ' + text);
-                        }, function(err) {
-                            console.error('Could not copy text: ', err);
-                        });
-                    }
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var qrImage = document.querySelector('.qrcode-card img');
+                        var spinner = document.querySelector('.loading-spinner');
+                        
+                        qrImage.onload = function() {
+                            spinner.style.display = 'none';
+                            qrImage.style.display = 'block';
+                        };
+
+                        qrImage.onerror = function() {
+                            spinner.style.display = 'none';
+                            alert("Errore nel caricamento del QR code. Riprova.");
+                        };
+                    });
                 </script>
             </head>
             <body>
                 <div class="container">
                     <div class="logo">
-                        <title>${plugin.getMessage("referral_page_title")}</title>
                         <img src="$logoUrl" alt="Logo" style="max-width: 150px; height: auto;">
                         <meta name="description" content="$siteDescription">
                     </div>
                     <div class="card">
                         <h2>${plugin.getMessage("referral_owner", "player_name" to referral.name)}</h2>
-                        <p class="referral-code">${plugin.getMessage("referral_code_site", "referral_code" to referral.referral)}</p>
+                        <p class="referral-code">${
+                plugin.getMessage(
+                    "referral_code_site",
+                    "referral_code" to referral.referral
+                )
+            }</p>
                         <p>${plugin.getMessage("total_hits_site", "total_hits" to referral.totalHits.toString())}</p>
                     </div>
                     <div class="server-ip">
@@ -157,13 +208,48 @@ class WebServer(private val plugin: EverShare) {
                             <i class="fas fa-copy"></i>${plugin.getMessage("copy_ip")}
                         </button>
                     </div>
+                    <div class="qrcode-card">
+                        <h3>Scan and Share</h3>
+                        <div class="loading-spinner"></div>
+                        <img src="/qrcode/$code" alt="QR Code">
+                    </div>
                 </div>
             </body>
             </html>
-        """.trimIndent()
+            """.trimIndent()
         } else {
             res.status(404)
             return plugin.getMessage("referral_not_found")
+        }
+    }
+
+    private fun handleQRCode(req: spark.Request, res: spark.Response): ByteArray {
+        val code = req.params(":code")
+        val referralPageUrl = "${req.scheme()}://${req.host()}/referral/$code"
+
+        return try {
+            val qrCodeWriter = QRCodeWriter()
+            val bitMatrix = qrCodeWriter.encode(referralPageUrl, BarcodeFormat.QR_CODE, 200, 200)
+            val width = bitMatrix.width
+            val height = bitMatrix.height
+            val image = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+            val qrColor = 0xFF0D6EFD.toInt()
+            val backgroundColor = 0x00FFFFFF
+
+            for (y in 0 until height) {
+                for (x in 0 until width) {
+                    val color = if (bitMatrix.get(x, y)) qrColor else backgroundColor
+                    image.setRGB(x, y, color)
+                }
+            }
+
+            val outputStream = ByteArrayOutputStream()
+            ImageIO.write(image, "png", outputStream)
+            res.type("image/png")
+            outputStream.toByteArray()
+        } catch (_: WriterException) {
+            res.status(500)
+            ByteArray(0)
         }
     }
 }
